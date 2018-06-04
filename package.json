@@ -1,0 +1,19 @@
+{
+  "name": "lib-js-util-symbol",
+  "version": "0.0.1",
+  "description": "Bitfinex Lib Utility for Symbols",
+  "author": "prdn <paolo@bitfinex.com> (https://bitfinex.com/)",
+  "keywords": [
+    "bitfinex"
+  ],
+  "dependencies": {
+  },
+  "engine": {
+    "node": ">=6.0"
+  },
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bitfinexcom/lib-js-util-symbol.git"
+  }
+}
