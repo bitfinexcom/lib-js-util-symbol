@@ -1,5 +1,5 @@
 {
-  "name": "lib-js-util-symbol",
+  "name": "@bitfinex/lib-js-util-symbol",
   "version": "0.0.1",
   "description": "Bitfinex Lib Utility for Symbols",
   "author": "prdn <paolo@bitfinex.com> (https://bitfinex.com/)",
