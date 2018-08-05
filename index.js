@@ -19,10 +19,20 @@ const pair_reverse = (pair) => {
   return pair_join(pair_ccy2(pair), pair_ccy1(pair))
 }
 
+const pair_ccy_base = (amount, pair) => {
+  return amount > 0 ? pair_ccy2(pair) : pair_ccy1(pair)
+}
+
+const pair_ccy_trading = (amount, pair) => {
+  return amount > 0 ? pair_ccy1(pair) : pair_ccy2(pair)
+}
+
 module.exports = {
   pair_join: pair_join,
   pair_ccy1: pair_ccy1,
   pair_ccy2: pair_ccy2,
   pair_split: pair_split,
-  pair_reverse: pair_reverse
+  pair_reverse: pair_reverse,
+  pair_ccy_base: pair_ccy_base,
+  pair_ccy_trading: pair_ccy_trading
 }
