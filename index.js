@@ -27,6 +27,12 @@ const pair_ccy_trading = (amount, pair) => {
   return amount > 0 ? pair_ccy1(pair) : pair_ccy2(pair)
 }
 
+const pair_deriv_spot = (pair) => {
+  const ccys = pair_split(pair)
+    .map(x => x.replace(/F[A-Z]{0,1}[0-9]{1,9}/, ''))
+  return pair_join(ccys[0], ccys[1])
+}
+
 module.exports = {
   pair_join: pair_join,
   pair_ccy1: pair_ccy1,
@@ -34,5 +40,6 @@ module.exports = {
   pair_split: pair_split,
   pair_reverse: pair_reverse,
   pair_ccy_base: pair_ccy_base,
-  pair_ccy_trading: pair_ccy_trading
+  pair_ccy_trading: pair_ccy_trading,
+  pair_deriv_spot: pair_deriv_spot
 }
