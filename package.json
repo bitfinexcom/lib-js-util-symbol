@@ -6,7 +6,16 @@
   "keywords": [
     "bitfinex"
   ],
+  "scripts": {
+    "test": "NODE_ENV=test ./node_modules/.bin/mocha ./test/index.test.js"
+  },
   "dependencies": {
+    "moment": "^2.24.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "dirty-chai": "^2.0.1",
+    "mocha": "^5.2.0"
   },
   "engine": {
     "node": ">=6.0"
