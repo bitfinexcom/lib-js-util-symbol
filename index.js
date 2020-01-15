@@ -1,7 +1,7 @@
 'use strict'
 
-const util = require('./util')
-const monthTable = require('./config/month.map')
+const util = require('./lib/util')
+const monthTable = require('./lib/month.map')
 
 const pair_join = (ccy1, ccy2) => {
   const fv2 = ccy1.length > 3 || ccy2.length > 3

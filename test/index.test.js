@@ -3,9 +3,9 @@
 const chai = require('chai').use(require('dirty-chai'))
 const { expect } = chai
 
-const monthTable = require('../config/month.map')
+const monthTable = require('../lib/month.map')
 
-const { nth_day_of_month } = require('../util')
+const { nth_day_of_month } = require('../lib/util')
 const { parse_quarterly_contract } = require('../index')
 
 describe('*** Unit testing! ***', () => {
