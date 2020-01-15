@@ -1,3 +1,8 @@
+'use strict'
+
+const util = require('./lib/util')
+const monthTable = require('./lib/month.map')
+
 const pair_join = (ccy1, ccy2) => {
   const fv2 = ccy1.length > 3 || ccy2.length > 3
   return fv2 ? `${ccy1}:${ccy2}` : ccy1 + ccy2
@@ -33,6 +38,27 @@ const pair_deriv_spot = (pair) => {
   return pair_join(ccys[0], ccys[1])
 }
 
+/**
+ * @param {string} sym
+ */
+const parse_quarterly_contract = (sym) => {
+  // format: <curr:3>F<month:1><day:2>, e.g. BTCFH20
+  sym = sym.split(':')[0]
+  if (sym.length !== 7) throw new Error('ERR_INVALID_SYM')
+  const curr = sym.substr(0, 3)
+
+  const year = '20' + sym.substr(sym.length - 2)
+  if (!/^\d{4}$/.test(year)) throw new Error('ERR_INVALID_SYM')
+
+  const m = sym[sym.length - 3]
+  const month = monthTable[m]
+  if (!month) throw new Error('ERR_INVALID_SYM')
+
+  const day = util.nth_day_of_month(year, month, 3, 4)
+
+  return { curr, year, month, day }
+}
+
 module.exports = {
   pair_join: pair_join,
   pair_ccy1: pair_ccy1,
@@ -41,5 +67,6 @@ module.exports = {
   pair_reverse: pair_reverse,
   pair_ccy_base: pair_ccy_base,
   pair_ccy_trading: pair_ccy_trading,
-  pair_deriv_spot: pair_deriv_spot
+  pair_deriv_spot: pair_deriv_spot,
+  parse_quarterly_contract: parse_quarterly_contract
 }
