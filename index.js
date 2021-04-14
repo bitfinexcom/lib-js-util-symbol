@@ -1,7 +1,17 @@
 'use strict'
 
+const { RESTv2 } = require('bfx-api-node-rest')
 const util = require('./lib/util')
 const monthTable = require('./lib/month.map')
+
+const bfxRest2 = new RESTv2()
+
+const ccy_translate = async ccy => {
+  const [map] = await bfxRest2.conf(['pub:map:currency:sym'])
+  const ccyUpper = ccy.toUpperCase()
+  const ccyMapping = map.find(([k]) => k === ccyUpper)
+  return ccyMapping ? ccyMapping[1] : ccy
+}
 
 const pair_join = (ccy1, ccy2) => {
   const fv2 = ccy1.length > 3 || ccy2.length > 3
@@ -60,6 +70,7 @@ const parse_quarterly_contract = (sym) => {
 }
 
 module.exports = {
+  ccy_translate,
   pair_join: pair_join,
   pair_ccy1: pair_ccy1,
   pair_ccy2: pair_ccy2,
