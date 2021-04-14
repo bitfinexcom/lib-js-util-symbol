@@ -6,11 +6,27 @@ const monthTable = require('./lib/month.map')
 
 const bfxRest2 = new RESTv2()
 
+/**
+ * @param {string} ccy
+ */
 const ccy_translate = async ccy => {
+  const [res] = await ccys_translate([ccy])
+  return res
+}
+
+/**
+ * @param {string[]} ccys
+ */
+const ccys_translate = async ccys => {
   const [map] = await bfxRest2.conf(['pub:map:currency:sym'])
-  const ccyUpper = ccy.toUpperCase()
-  const ccyMapping = map.find(([k]) => k === ccyUpper)
-  return ccyMapping ? ccyMapping[1] : ccy
+  const result = []
+  for (const ccy of ccys) {
+    const ccyUpper = ccy.toUpperCase()
+    const ccyMapping = map.find(([k]) => k === ccyUpper)
+    result.push(ccyMapping ? ccyMapping[1] : ccy)
+  }
+
+  return result
 }
 
 const pair_join = (ccy1, ccy2) => {
@@ -71,6 +87,7 @@ const parse_quarterly_contract = (sym) => {
 
 module.exports = {
   ccy_translate,
+  ccys_translate,
   pair_join: pair_join,
   pair_ccy1: pair_ccy1,
   pair_ccy2: pair_ccy2,

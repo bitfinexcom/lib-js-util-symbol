@@ -10,7 +10,7 @@ jest.mock('bfx-api-node-rest', () => ({
 const monthTable = require('../lib/month.map')
 
 const { nth_day_of_month } = require('../lib/util')
-const { parse_quarterly_contract, ccy_translate } = require('../index')
+const { parse_quarterly_contract, ccy_translate, ccys_translate } = require('../index')
 
 describe('*** Unit testing! ***', () => {
   describe('# nth_day_of_month', () => {
@@ -65,6 +65,30 @@ describe('*** Unit testing! ***', () => {
         i++
         expect(res.month).toEqual(i < 10 ? `0${i}` : i.toString())
       })
+    })
+  })
+
+  describe('# ccys_translate', () => {
+    beforeEach(() => {
+      mockRestConf.mockClear()
+    })
+
+    it('returns mapped value', async () => {
+      mockRestConf.mockResolvedValue([[['K1', 'V1'], ['K2', 'V2']]])
+      const result = await ccys_translate(['K1', 'K2'])
+      expect(result).toEqual(['V1', 'V2'])
+    })
+
+    it('looks up by upper cased value', async () => {
+      mockRestConf.mockResolvedValue([[['K1', 'V1'], ['K2', 'V2']]])
+      const result = await ccys_translate(['k1'])
+      expect(result).toEqual(['V1'])
+    })
+
+    it('returns parameter if no mapping found', async () => {
+      mockRestConf.mockResolvedValue([[['K1', 'V1'], ['K2', 'V2']]])
+      const result = await ccys_translate(['k3'])
+      expect(result).toEqual(['k3'])
     })
   })
 
