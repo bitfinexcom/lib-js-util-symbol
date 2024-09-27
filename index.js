@@ -2,6 +2,7 @@
 
 const util = require('./lib/util')
 const monthTable = require('./lib/month.map')
+const { BFX_SUPPORTED_FIATS, FIAT_LIST } = require('./lib/fiat.constants')
 
 const pair_join = (ccy1, ccy2) => {
   const fv2 = ccy1.length > 3 || ccy2.length > 3
@@ -59,14 +60,24 @@ const parse_quarterly_contract = (sym) => {
   return { curr, year, month, day }
 }
 
+const is_fiat_ccy = (ccy) => {
+  return !!FIAT_LIST[ccy]
+}
+
+const is_bfx_wire_ccy = (ccy) => {
+  return BFX_SUPPORTED_FIATS.has(ccy)
+}
+
 module.exports = {
-  pair_join: pair_join,
-  pair_ccy1: pair_ccy1,
-  pair_ccy2: pair_ccy2,
-  pair_split: pair_split,
-  pair_reverse: pair_reverse,
-  pair_ccy_base: pair_ccy_base,
-  pair_ccy_trading: pair_ccy_trading,
-  pair_deriv_spot: pair_deriv_spot,
-  parse_quarterly_contract: parse_quarterly_contract
+  pair_join,
+  pair_ccy1,
+  pair_ccy2,
+  pair_split,
+  pair_reverse,
+  pair_ccy_base,
+  pair_ccy_trading,
+  pair_deriv_spot,
+  parse_quarterly_contract,
+  is_fiat_ccy,
+  is_bfx_wire_ccy
 }

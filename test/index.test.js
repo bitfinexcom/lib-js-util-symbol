@@ -6,7 +6,7 @@ const { expect } = chai
 const monthTable = require('../lib/month.map')
 
 const { nth_day_of_month } = require('../lib/util')
-const { parse_quarterly_contract } = require('../index')
+const { parse_quarterly_contract, is_fiat_ccy, is_bfx_wire_ccy } = require('../index')
 
 describe('*** Unit testing! ***', () => {
   describe('# nth_day_of_month', () => {
@@ -61,6 +61,30 @@ describe('*** Unit testing! ***', () => {
         i++
         expect(res.month).to.be.equal(i < 10 ? `0${i}` : i.toString())
       })
+    })
+  })
+
+  describe('# is_fiat', () => {
+    it('it should fail with invalid fiat_ccy', () => {
+      const res = is_fiat_ccy('BTC')
+      expect(res).to.be.equal(false)
+    })
+
+    it('it should works with valid fiat_ccy', () => {
+      const res = is_fiat_ccy('EUR')
+      expect(res).to.be.equal(true)
+    })
+  })
+
+  describe('# is_bfx_wire_ccy', () => {
+    it('it should fail with not supported CCY', () => {
+      const res = is_bfx_wire_ccy('COP')
+      expect(res).to.be.equal(false)
+    })
+
+    it('it should works with valid supported fiat_ccy', () => {
+      const res = is_bfx_wire_ccy('GBP')
+      expect(res).to.be.equal(true)
     })
   })
 })
