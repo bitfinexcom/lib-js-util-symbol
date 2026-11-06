@@ -1,4 +1,5 @@
 'use strict'
+/* eslint-disable camelcase -- public API names are snake_case; renaming them would break consumers */
 
 const util = require('./lib/util')
 const monthTable = require('./lib/month.map')
@@ -60,13 +61,13 @@ const parse_quarterly_contract = (sym) => {
 }
 
 module.exports = {
-  pair_join: pair_join,
-  pair_ccy1: pair_ccy1,
-  pair_ccy2: pair_ccy2,
-  pair_split: pair_split,
-  pair_reverse: pair_reverse,
-  pair_ccy_base: pair_ccy_base,
-  pair_ccy_trading: pair_ccy_trading,
-  pair_deriv_spot: pair_deriv_spot,
-  parse_quarterly_contract: parse_quarterly_contract
+  pair_join,
+  pair_ccy1,
+  pair_ccy2,
+  pair_split,
+  pair_reverse,
+  pair_ccy_base,
+  pair_ccy_trading,
+  pair_deriv_spot,
+  parse_quarterly_contract
 }
