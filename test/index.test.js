@@ -1,66 +1,47 @@
 'use strict'
 
-const chai = require('chai').use(require('dirty-chai'))
-const { expect } = chai
+const test = require('brittle')
 
 const monthTable = require('../lib/month.map')
 
-const { nth_day_of_month } = require('../lib/util')
-const { parse_quarterly_contract } = require('../index')
+const { nth_day_of_month: nthDayOfMonth } = require('../lib/util')
+const { parse_quarterly_contract: parseQuarterlyContract } = require('../index')
 
-describe('*** Unit testing! ***', () => {
-  describe('# nth_day_of_month', () => {
-    it('it should fail with invalid year', () => {
-      expect(
-        nth_day_of_month.bind(null, 'twenty', '03', 3, 4)
-      ).to.throw('ERR_DATE_INVALID_YEAR')
-    })
+test('nth_day_of_month fails with invalid year', (t) => {
+  t.exception(() => nthDayOfMonth('twenty', '03', 3, 4), /ERR_DATE_INVALID_YEAR/)
+})
 
-    it('it should fail with invalid month', () => {
-      expect(
-        nth_day_of_month.bind(null, '2020', 'july', 3, 4)
-      ).to.throw('ERR_DATE_INVALID_MONTH')
-    })
+test('nth_day_of_month fails with invalid month', (t) => {
+  t.exception(() => nthDayOfMonth('2020', 'july', 3, 4), /ERR_DATE_INVALID_MONTH/)
+})
 
-    it('it should fail with invalid week', () => {
-      expect(
-        nth_day_of_month.bind(null, '2020', '03', 5, 4)
-      ).to.throw('ERR_DATE_INVALID_WEEK')
-    })
+test('nth_day_of_month fails with invalid week', (t) => {
+  t.exception(() => nthDayOfMonth('2020', '03', 5, 4), /ERR_DATE_INVALID_WEEK/)
+})
 
-    it('it should fail with invalid day', () => {
-      expect(
-        nth_day_of_month.bind(null, '2020', '03', 3, 7)
-      ).to.throw('ERR_DATE_INVALID_DAY')
-    })
+test('nth_day_of_month fails with invalid day', (t) => {
+  t.exception(() => nthDayOfMonth('2020', '03', 3, 7), /ERR_DATE_INVALID_DAY/)
+})
 
-    it('it should return expected values', () => {
-      expect(
-        nth_day_of_month('2020', '03', 4, 4)
-      ).to.be.equal('27')
-      expect(
-        nth_day_of_month('2020', '01', 1, 2)
-      ).to.be.equal('01')
-    })
-  })
+test('nth_day_of_month returns expected values', (t) => {
+  t.is(nthDayOfMonth('2020', '03', 4, 4), '27')
+  t.is(nthDayOfMonth('2020', '01', 1, 2), '01')
+})
 
-  describe('# parse_quarterly_contract', () => {
-    it('it should fail with invalid formats', () => {
-      expect(parse_quarterly_contract.bind(null, 'BTCH20:USTF0')).to.throw('ERR_INVALID_SYM')
-      expect(parse_quarterly_contract.bind(null, 'BTCFH2a:USTF0')).to.throw('ERR_INVALID_SYM')
-      expect(parse_quarterly_contract.bind(null, 'BTCFA20:USTF0')).to.throw('ERR_INVALID_SYM')
-    })
+test('parse_quarterly_contract fails with invalid formats', (t) => {
+  t.exception(() => parseQuarterlyContract('BTCH20:USTF0'), /ERR_INVALID_SYM/)
+  t.exception(() => parseQuarterlyContract('BTCFH2a:USTF0'), /ERR_INVALID_SYM/)
+  t.exception(() => parseQuarterlyContract('BTCFA20:USTF0'), /ERR_INVALID_SYM/)
+})
 
-    it('it should work with correct format', () => {
-      const thirdFridays = ['17', '21', '20', '17', '15', '19', '17', '21', '18', '16', '20', '18']
-      Object.keys(monthTable).forEach((key, i) => {
-        const res = parse_quarterly_contract(`BTCF${key}20:USTF0`)
-        expect(res.curr).to.be.equal('BTC')
-        expect(res.day).to.be.equal(thirdFridays[i])
-        expect(res.year).to.be.equal('2020')
-        i++
-        expect(res.month).to.be.equal(i < 10 ? `0${i}` : i.toString())
-      })
-    })
+test('parse_quarterly_contract works with correct format', (t) => {
+  const thirdFridays = ['17', '21', '20', '17', '15', '19', '17', '21', '18', '16', '20', '18']
+  Object.keys(monthTable).forEach((key, i) => {
+    const res = parseQuarterlyContract(`BTCF${key}20:USTF0`)
+    const month = i + 1
+    t.is(res.curr, 'BTC')
+    t.is(res.day, thirdFridays[i])
+    t.is(res.year, '2020')
+    t.is(res.month, month < 10 ? `0${month}` : month.toString())
   })
 })

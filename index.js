@@ -3,45 +3,45 @@
 const util = require('./lib/util')
 const monthTable = require('./lib/month.map')
 
-const pair_join = (ccy1, ccy2) => {
+const pairJoin = (ccy1, ccy2) => {
   const fv2 = ccy1.length > 3 || ccy2.length > 3
   return fv2 ? `${ccy1}:${ccy2}` : ccy1 + ccy2
 }
 
-const pair_ccy1 = (pair) => {
+const pairCcy1 = (pair) => {
   return pair.length > 6 ? pair.split(':')[0] : pair.substr(0, 3)
 }
 
-const pair_ccy2 = (pair) => {
+const pairCcy2 = (pair) => {
   return pair.length > 6 ? pair.split(':')[1] : pair.substr(3, 6)
 }
 
-const pair_split = (pair) => {
-  return [pair_ccy1(pair), pair_ccy2(pair)]
+const pairSplit = (pair) => {
+  return [pairCcy1(pair), pairCcy2(pair)]
 }
 
-const pair_reverse = (pair) => {
-  return pair_join(pair_ccy2(pair), pair_ccy1(pair))
+const pairReverse = (pair) => {
+  return pairJoin(pairCcy2(pair), pairCcy1(pair))
 }
 
-const pair_ccy_base = (amount, pair) => {
-  return amount > 0 ? pair_ccy2(pair) : pair_ccy1(pair)
+const pairCcyBase = (amount, pair) => {
+  return amount > 0 ? pairCcy2(pair) : pairCcy1(pair)
 }
 
-const pair_ccy_trading = (amount, pair) => {
-  return amount > 0 ? pair_ccy1(pair) : pair_ccy2(pair)
+const pairCcyTrading = (amount, pair) => {
+  return amount > 0 ? pairCcy1(pair) : pairCcy2(pair)
 }
 
-const pair_deriv_spot = (pair) => {
-  const ccys = pair_split(pair)
+const pairDerivSpot = (pair) => {
+  const ccys = pairSplit(pair)
     .map(x => x.replace(/F[A-Z]{0,1}[0-9]{1,9}/, ''))
-  return pair_join(ccys[0], ccys[1])
+  return pairJoin(ccys[0], ccys[1])
 }
 
 /**
  * @param {string} sym
  */
-const parse_quarterly_contract = (sym) => {
+const parseQuarterlyContract = (sym) => {
   // format: <curr:3>F<month:1><day:2>, e.g. BTCFH20
   sym = sym.split(':')[0]
   if (sym.length !== 7) throw new Error('ERR_INVALID_SYM')
@@ -60,13 +60,13 @@ const parse_quarterly_contract = (sym) => {
 }
 
 module.exports = {
-  pair_join: pair_join,
-  pair_ccy1: pair_ccy1,
-  pair_ccy2: pair_ccy2,
-  pair_split: pair_split,
-  pair_reverse: pair_reverse,
-  pair_ccy_base: pair_ccy_base,
-  pair_ccy_trading: pair_ccy_trading,
-  pair_deriv_spot: pair_deriv_spot,
-  parse_quarterly_contract: parse_quarterly_contract
+  pair_join: pairJoin,
+  pair_ccy1: pairCcy1,
+  pair_ccy2: pairCcy2,
+  pair_split: pairSplit,
+  pair_reverse: pairReverse,
+  pair_ccy_base: pairCcyBase,
+  pair_ccy_trading: pairCcyTrading,
+  pair_deriv_spot: pairDerivSpot,
+  parse_quarterly_contract: parseQuarterlyContract
 }
